@@ -1,11 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
-require("dotenv").config();
-
 const app = express();
 
-const port = process.env.PORT || 8000;
+const port =  8000;
 
 app.use(cors());
 app.use(express.json());
@@ -39,6 +37,28 @@ app.get("/all_dua", (req, res) => {
       return res.status(500).json({ error: err.message });
     }
 
+    res.json(rows);
+  });
+});
+
+app.get("/all_dua_cat/:cat_id", (req, res) => {
+  const cat_id = req.params.cat_id;
+  const query = "SELECT * FROM dua WHERE cat_id = ?";
+  db.all(query, [cat_id], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+  });
+});
+
+app.get("/all_dua_subcat/:subcat_id", (req, res) => {
+  const subcat_id = req.params.subcat_id;
+  const query = "SELECT * FROM dua WHERE subcat_id = ?";
+  db.all(query, [subcat_id], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
     res.json(rows);
   });
 });
