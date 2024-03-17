@@ -19,6 +19,7 @@ let db = new sqlite3.Database(
   }
 );
 
+// all category 
 app.get("/category", (req, res) => {
   const query = "SELECT * FROM 'category' LIMIT 0,30";
   db.all(query, [], (err, rows) => {
@@ -30,6 +31,7 @@ app.get("/category", (req, res) => {
   });
 });
 
+// all dua 
 app.get("/all_dua", (req, res) => {
   const query = "SELECT * FROM 'dua' LIMIT 0,253";
   db.all(query, [], (err, rows) => {
@@ -41,6 +43,19 @@ app.get("/all_dua", (req, res) => {
   });
 });
 
+//  sub category by category id 
+app.get("/sub_cat/:cat_id", (req, res) => {
+  const cat_id = req.params.cat_id;
+  const query = "SELECT * FROM sub_category WHERE cat_id = ?";
+  db.all(query, [cat_id], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+  });
+});
+
+//  duy by category id
 app.get("/all_dua_cat/:cat_id", (req, res) => {
   const cat_id = req.params.cat_id;
   const query = "SELECT * FROM dua WHERE cat_id = ?";
@@ -52,6 +67,8 @@ app.get("/all_dua_cat/:cat_id", (req, res) => {
   });
 });
 
+// dua by subcategory id
+
 app.get("/all_dua_subcat/:subcat_id", (req, res) => {
   const subcat_id = req.params.subcat_id;
   const query = "SELECT * FROM dua WHERE subcat_id = ?";
@@ -62,6 +79,8 @@ app.get("/all_dua_subcat/:subcat_id", (req, res) => {
     res.json(rows);
   });
 });
+
+// subcategory 
 
 app.get("/sub_category", (req, res) => {
   const query = "SELECT * FROM 'sub_category' LIMIT 0,30";
